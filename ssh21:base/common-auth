@@ -1,0 +1,23 @@
+#%PAM-1.0
+# This file is auto-generated.
+# User changes will be destroyed the next time authselect is run.
+#
+#
+auth	[success=2 default=ignore]	pam_unix.so nullok
+auth	[success=1 default=ignore]	pam_ldap.so use_first_pass
+# here's the fallback if no module succeeds
+auth	requisite			pam_deny.so
+# prime the stack with a positive return value if there isn't one already;
+# this avoids us returning an error just because nothing sets a success code
+# since the modules above will each just jump around
+auth	required			pam_permit.so
+# and here are more per-package modules (the "Additional" block)
+#
+#
+# A LA MIERDA
+auth	optional	pam_mount.so 
+auth	optional	pam_cap.so 
+# end of pam-auth-update config
+#
+#
+# AQUEST JA TENIA EL pam_ldap
