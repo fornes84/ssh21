@@ -1,57 +1,75 @@
-# pam21
-#
+#Al arxiu /etc/sshd/sshd_config
+#habilitem l'authentificació per clau publica i per password, tot i que la de password la treurem més endevant
+PasswordAuthentication yes
+PubkeyAuthentication yes
 
-common-auth      
-login.defs          
-common-session  
-pam_mount.conf.xml  
+iniciarem el servei de servidor al arrancar:
+service ssh start --> arranca /usr/sbin/sshd
 
+docker run --rm --name pam.edt.org  --privileged --network 2hisix -p 22:22 -it balenabalena/ssh21:base
 
-Consulta el HowTo-PAM l’apartat “Implantació del servei nss-pam-ldap” pagina 30
-● Consulta el man de pam_ldap.so
-● Crear la imatge: pam21:ldap
+-----------------------------------
 
-Configura el container PAM (--privileged) per:
-● Permetre l’autenticació local dels usuaris unix locals (unix01, unix02 i unix03)
-● Permetre l’autenticació d’usuaris de LDAP.
+1era de 3 formes de connexió amb authentificació d'usuari, 
+(EL FINGER PRINT EL FA SEMPRE !!!)
 
-Per fer-ho s’utilitzarà la imatge ldap21/grup que conté el llistat final d’usuaris i grups
-LDAP amb els que treballar.
+1a) per password:
 
-● Als usuaris LDAP se’ls ha de crear el directori home automàticament si no existeix.
-● Als usuaris LDAP se’ls ha de crear un recurs temporal, dins del home anomenat tmp.
-Un ramdisk de tipus tmpfs de 100M.
+# ssh unix01@172.19.0.2
+The authenticity of host '172.19.0.2 (172.19.0.2)' can't be established.
+ECDSA key fingerprint is SHA256:iLiNaZkOQrgzyDNHOFfyonT052e46LhydcrcnxA65Qo.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 
-● Tots els usuaris han de poder modificar-se el password. Els usuaris locals i també
-els usuaris de LDAP.
-Atenció: potser cal refer la configuració ACL de la base de dades LDAP edt.org per
-permetre que els usuaris es puguin modificar el seu password.
-Metodologia de treball recomanada:
+Warning: Permanently added '172.19.0.2' (ECDSA) to the list of known hosts.
+ssh_dispatch_run_fatal: Connection to 172.19.0.2 port 22: Broken pipe
+(el missatge d'error era pq no hem propagat el port 22 en la xarxa docker)
 
-● Es recomana fer una copia de pam21:base i generar pam1:ldap.
+Al aceptar, estem afegint al nostre arxiu (local) ~/.ssh/known_hosts,  la relació fingerprint (hash CLAU PUBLICA maq remota)-IP maq remota  (per seguretat) per si la IP cambia que no ens conectem on no toca. (és la Verificació del host remot)
 
-● Treballar interactivament amb aquesta nova imatge afegint els paquets de PAM
-LDAP i NSS. Observar les opcions de configuració que demana Debian en instal·lar
-aquests paquets i en quins fitxers afecten aquestes configuracions.
+Ara pregunta password i dins (provat amb usuaris UNIX i LDAP)
 
-● Manualment engegar els serveis nscd i nslcd.
+sshd_config cambiar:
+	- PasswordAuthet   yes
+	- PubkeyAuthent    no
 
-● Verificar:
-○ Si està ben configurat l’accés LDAP, nsswitch, nscd i nslcd lavors les ordres
-getent han de funcionar correctament (gent passwd i getent group).
-○ Si també es configura els fitxers de PAM (auth, acount, session i password)
-llavors l’autenticació amb usuaris linux i unix és total.
+1b) per parelles de claus publica/privada
 
-● Un cop interactivament s’ha construït un container que autentica correctament unix i
-ldap cal generar automatitzadament la imatge pam21:ldap a través del Dockerfile.
-Observacions:
+Un compte d’usuari en el servidor remot(ex: unix01) confiarà amb tots els usuaris d’un host client si disposa en el seu authorized_keys de la clau pública del host client. Per tant cal concatenar la clau /etc/ssh/ssh_host_key.pub (o la RSA o DSA) al ~/.ssh/authorized_keys
+del compte de l’usuari en el servidor remot.
 
-● Observeu que en el procés d’instal·lació i configuració interctiu amb Debian sembla
-que tot es configura apropiadament i l’autenticació d’usuaris està molt més afinada.
+sshd_config cambiar:
+	- PasswordA  no
+	- PubkeyAuthen  yes
 
-● En canvi si ho feu manaualment sembla que queden ‘detals’ per tunejar de manra
-que l’autenticació és més ‘aspre’.
+Hem d'enviar al usuari del servidor(unix01) les claus del usuari client(marc) que exec el ssh ubicades a ~/.ssh/NOM_X__rsa.pub cap ~/.ssh/authorized_keys 
 
-● Mireu d’esbrinar quins són tot els canvis de configuració que fa automàticament la
-instal3lació interactiva per propagar-los a la configuració del Dockerfile.
+	ssh-copy-id  usuario@IP_servidor
+	scp archivo.txt usuario@dominio.com:/home/usuario (HABILITEM ACCES PER PASSWORD I H		O FEM)
+
+1c) Gssapi --> Kerberos
+
+--------------------------
+
+2na FORMA: Verificació host remot per aceptació de fingerprint 
+(RECORDAR ordre  sha256sum)
+
+Tornem a configurar l'arxiu i treiem que es pugui loguerjar per password:
+
+	PubkeyAuth	yes ???
+	PasswordAuthentication no
+	ChallengeResponseAuth  no
+	HostbasedAuthentication yes
+
+Ara volem authentificar NO els usuaris (sino la maquina) per clau publica/privada (identificació).
+
+Al instalar ssh (nostre cas el docker-servidor) genera automat les claus a:
+
+# /etc/ssh/ssh_host_rsa_key --> CLAU PRIVADA HOST
+# /etc/ssh/ssh_host_rsa_key.pub --> CLAU PUBLICA HOST
+
+per tant se li ha de passar al usuari servidro que confí en tots els usuris
+que d'aquesta clau publica de host
+
+------------------------------------------------------------
+
 

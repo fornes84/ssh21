@@ -29,11 +29,20 @@ cp /opt/docker/common-account /etc/pam.d/common-account
 cp /opt/docker/pam_mount.conf.xml /etc/security/pam_mount.conf.xml
 # que s'ha de montar a cada inici de sessio d'un usuari
 
-# iniciem els serveis
+#config servidor ssh
+
+# iniciem els serveis PAM-LDAP
 
 /usr/sbin/nscd
 /usr/sbin/nslcd
-#AQUEST NO XUTA 
 
+
+cp /opt/docker/sshd_config /etc/ssh/sshd_config
+
+#iniciem servidor sshd
+# PROBLEMES DE PRIVILEGIS /usr/sbin/sshd
+service ssh start
+
+# inicicem terminal
 /bin/bash
 
