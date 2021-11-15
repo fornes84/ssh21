@@ -50,25 +50,39 @@ Hem d'enviar al usuari del servidor(unix01) les claus del usuari client(marc) qu
 
 --------------------------
 
-2na FORMA: Verificació host remot per aceptació de fingerprint 
+2na FORMA: Verificació del host remot per aceptació de fingerprint 
 (RECORDAR ordre  sha256sum)
 
-Tornem a configurar l'arxiu i treiem que es pugui loguerjar per password:
+SERVIDOR:
+Tornem a configurar l'arxiu "sshd_config" i treiem que es pugui loguerjar per password:
 
-	PubkeyAuth	yes ???
+	PubkeyAuth	no
 	PasswordAuthentication no
 	ChallengeResponseAuth  no
 	HostbasedAuthentication yes
 
-Ara volem authentificar NO els usuaris (sino la maquina) per clau publica/privada (identificació).
+Ara el que volem authentificar NO els usuaris (sino la maquina) per clau publica/privada (identificació).
+
+Creem el fitxer ssh_known_hosts (a /etc/ssh) i guardem dins les claus del host client:
+/etc/ssh/ssh_host_dsa_key.pub i /etc/ssh/ssh_host_rsa_key.pub
+
+service ssh restart
+
+
+CLIENT:
+
+A client hem de verificar els pemisos del fitxer:
+vim /usr/lib/openssh/ssh-keysign
+i també habilitar i descomentar la linea HostbasedAuthentification yes
+ de client /etc/ssh/ssh_config i també habilitar (EnableSSHKeysign yes)
 
 Al instalar ssh (nostre cas el docker-servidor) genera automat les claus a:
 
 # /etc/ssh/ssh_host_rsa_key --> CLAU PRIVADA HOST
 # /etc/ssh/ssh_host_rsa_key.pub --> CLAU PUBLICA HOST
 
-per tant se li ha de passar al usuari servidro que confí en tots els usuris
-que d'aquesta clau publica de host
+RESUM: Se li ha de passar al usuari servidro que confí en tots els usuris
+que d'aquesta clau publica de host client
 
 ------------------------------------------------------------
 
