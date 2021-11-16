@@ -107,7 +107,26 @@ https://www.redeszone.net/tutoriales/servidores/servidor-openssh-linux-configura
 
 OPCIONS DE CONFIGURACIO SSH CLIENT (ssh_config):
 
+La configuració client usualment resideix en el fitxer /etc/ssh/ssh_conf. Aquest fitxer defineix les opcions d’àmbit global o system-wide. Però hi ha més nivells de defició d’opcions de configuració, que són les següents:
+
+● # 1. command line options ($ssh -o opcio1,opcio2... user@host)
+● # 2. user-specific file (.ssh/config)
+
+OPCIONS DE CONF:
+
+ForwardX11Trusted yes --> Sessió gràfica
 
 
+
+
+
+ORDRES /UTILITATS DE CLIENT:
+
+● SSH
+● SCP
+● SFTP
+● SSHFS
+● SSH-COPY-IP
+● SSH-KEY-SCAN
 
 
