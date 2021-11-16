@@ -6,7 +6,9 @@ PubkeyAuthentication yes
 iniciarem el servei de servidor al arrancar:
 service ssh start --> arranca /usr/sbin/sshd
 
-docker run --rm --name pam.edt.org  --privileged --network 2hisix -p 22:22 -it balenabalena/ssh21:base
+docker run --rm --name sshPAM.edt.org  --privileged --network 2hisix -p 2200:22 -it balenabalena/ssh21:base
+
+docker run --rm --name ldap.edt.org -h ldap.edt.org --network 2hisix -p 389:389 -it balenabalena/lda21:grups
 
 -----------------------------------
 
@@ -85,5 +87,27 @@ RESUM: Se li ha de passar al usuari servidro que confí en tots els usuris
 que d'aquesta clau publica de host client
 
 ------------------------------------------------------------
+
+
+OPCIONS DE CONFIGURACIO SSH SERVIDOR (sshd_config):
+
+-Podem cambiar el port del SSH a un escollit per nosaltres (hem de tenir en compte que no estigui en el rang de ports reservats), ens fiquem al fitxer "/etc/ssh/sshd_config" i descomentem la línea de "Port" i possem el port que haguem escollit.
+
+-Descomentem la línea de "PermitRootLogin" i li afegim la opció "no" perquè no ens permeti entrar com a root.
+
+-Acces a usuaris/grups concrets:
+
+AllowUsers --> permetem que usuaris en concrets siguin només els que puguin accedir.
+DenyUsers --> excluim als usuaris concrets que no volem que puguin entrar.
+AllowGroups/DenyGroups: Idem
+MaxStatups --> Max sessions que permetem (evitar força bruta)
+https://www.redeszone.net/tutoriales/servidores/servidor-openssh-linux-configuracion-maxima-seguridad/
+
+-----------------------------------------------------------
+
+OPCIONS DE CONFIGURACIO SSH CLIENT (ssh_config):
+
+
+
 
 
