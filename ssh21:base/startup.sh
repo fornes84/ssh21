@@ -23,7 +23,7 @@ cp /opt/docker/nslcd.conf /etc/nslcd.conf
 cp /opt/docker/common-auth /etc/pam.d/common-auth
 cp /opt/docker/common-session /etc/pam.d/common-session
 cp /opt/docker/common-account /etc/pam.d/common-account
-#cp /opt/docker/common-password /etc/pam.d/common-password
+cp /opt/docker/common-password /etc/pam.d/common-password
 # DE MOMENT NO ELS UTILTIZEM (CREC)
 
 cp /opt/docker/pam_mount.conf.xml /etc/security/pam_mount.conf.xml
@@ -41,7 +41,8 @@ cp /opt/docker/sshd_config /etc/ssh/sshd_config
 
 #iniciem servidor sshd
 # PROBLEMES DE PRIVILEGIS /usr/sbin/sshd
-#service ssh start
+#service ssh start  o bé
+mkdir /run/sshd
 service ssh start -D
 # inicicem terminal (amb detauch treure)
 # /bin/bash

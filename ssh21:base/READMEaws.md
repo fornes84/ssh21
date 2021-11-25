@@ -15,12 +15,9 @@ VERIFICAR QUE FUNCIONEN!!
 -----------------------------------
 
 **ssh21:aws**:	
-
 ipPUBLICA: 13.38.28.221
 
-
 1er:
-
 Llançarem una instancia AWS on habilitarem a les regles --> Security group reules, obrim  els d'entrada 389 LDAP, 22 SSH, i 2022 (admin es l'usuari per defecte en AMI Debian)
 Ens conectem via ssh desdel nostre PC a la AMI mitjançant la clau privada ssh -i ~/noseque.pem admin@IP_AMI (hem de treure permisos al fitxer on es guarda la clau privada pq nomes pugui llegir/escriure el propietari -->  chmod 600 XXX.pem
  
@@ -32,19 +29,24 @@ docker-compose --version
 Exeutem docker compose amb el fitx .ylm de la clase pasada, per llançar els 2 dockers (LDAP i no recordo) (cada un obrint els ports corresponents).
 
 sudo docker compose up -d (previament compiem a la AMI el .yml)
-(docker-compose down)
+(sudo docker-compose down)
 
 Instal·lem també el ldap-utils, i nmap a la AMI per fer consultes.
 
 Verifiquem que desde la AMI podem fer ldapsearch.. 
  ldapsearch -x -h localhost -LLL -b 'dc=edt,dc=org'
 (comprovació LDAP) i comprovem que podem conectar-nos via ssh de la AMI al docker:
-Verifiquem la connexió SSH amb els usuaris unix per el port 2022: ssh -p 2022 unix01@localhost
-Comprobem que tenim bé la connexió SSH amb els usuaris LDAP per el port 2022: ssh -p 2022 marta1@localhost
+Verifiquem la connexió SSH amb els usuaris unix per el port 2022: 
+
+ssh -p 2022 unix01@localhost
+
+Comprobem que tenim bé la connexió SSH amb els usuaris LDAP per el port 2022: 
+
+ssh -p 2022 marta1@localhost
 
 i ara provem desde 'fora' (des del nostre PC) cap a la AMI:
 	Comprobem que podem fer consultes LDAP: 
-ldapsearch -x -h 'IP_AMAZON' -LLL -b 'dc=edt,dc=org'
+ldapsearch -x -h 'IP_+AMAZON' -LLL -b 'dc=edt,dc=org'
 
 
 
