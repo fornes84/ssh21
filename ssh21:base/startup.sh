@@ -36,8 +36,6 @@ cp /opt/docker/pam_mount.conf.xml /etc/security/pam_mount.conf.xml
 /usr/sbin/nscd
 /usr/sbin/nslcd
 
-
-
 /usr/bin/ssh-keygen -A
 cp /opt/docker/sshd_config /etc/ssh/sshd_config
 

@@ -116,10 +116,6 @@ OPCIONS DE CONF:
 
 ForwardX11Trusted yes --> Sessió gràfica
 
-
-
-
-
 ORDRES /UTILITATS DE CLIENT:
 
 ● SSH

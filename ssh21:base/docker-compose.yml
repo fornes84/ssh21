@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  ldap:
+    image: balenabalena/ldap21:grups
+    container_name: ldap.edt.org
+    hostname: ldap.edt.org
+    ports: 
+      - "389:389"
+    networks:
+     - 2hisix
+  ssh:
+    image: balenabalena/ssh21:base
+    container_name: ssh.edt.org
+    hostname: ssh.edt.org
+    ports:
+      - "2022:22"
+    networks:
+     - 2hisix
+  portainer:
+    image: portainer/portainer
+    container_name: portainer.edt.org
+    hostname: portainer.edt.org
+    ports: 
+     - "9000:9000"
+    volumes:
+     - /var/run/docker.sock:/var/run/docker.sock 
+networks:
+  2hisix:
+
