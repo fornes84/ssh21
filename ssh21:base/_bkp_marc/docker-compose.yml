@@ -6,11 +6,10 @@ services:
     hostname: ldap.edt.org
     ports: 
       - "389:389"
-      - "636:636"
     networks:
      - 2hisix
   ssh:
-    image: rubeeenrg/ssh21:base
+    image: balenabalena/ssh21:base
     container_name: ssh.edt.org
     hostname: ssh.edt.org
     ports:

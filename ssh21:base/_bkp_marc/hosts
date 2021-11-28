@@ -1,0 +1,12 @@
+127.0.0.1	localhost
+127.0.1.1	debian
+#192.168.122.218 sitio2.org sitio1.org
+
+# The following lines are desirable for IPv6 capable hosts
+::1     localhost ip6-localhost ip6-loopback
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+#profeN2I.informatica.escoladeltreball.org server
+#profeN2I.informatica.escoladeltreball.org server
+52.47.75.96 ldap.edt.org
+52.47.75.96 pam.edt.org
