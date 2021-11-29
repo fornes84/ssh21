@@ -20,6 +20,9 @@ cp /opt/docker/pam_mount.conf.xml /etc/security/pam_mount.conf.xml
 /usr/sbin/nscd
 /usr/sbin/nslcd
 
+#incicem creacio dels homes dels usuaris LDAP quan estan exe els procesos anteriors i sap on buscar la info
+bash /opt/docker/script.sh
+
 # ssh21
 cp /opt/docker/sshd_config /etc/ssh/sshd_config
 #/usr/bin/ssh-keygen -A
